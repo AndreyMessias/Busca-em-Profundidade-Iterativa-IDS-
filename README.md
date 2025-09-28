@@ -89,7 +89,7 @@ a ordem completa dos nós visitados em todas as iterações.
       Observação: A DFS explorou primeiro o ramo profundo, visitando muitos nós X1..Xn antes de voltar e encontrar B->E. A IDS localizou E em profundidade pequena       (2), sem explorar toda a cadeia profunda.
       
       
-    ---
+  ---
     
 ## 📊 Comparação de Desempenho
 
