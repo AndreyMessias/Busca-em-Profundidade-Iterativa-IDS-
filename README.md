@@ -41,25 +41,25 @@ A implementação está no arquivo:
 
 Principais funções:
 
-dfs_recursive(start, goal, graph)
-Implementa uma DFS recursiva simples, sem proteção contra ciclos.
+- dfs_recursive(start, goal, graph)
+  Implementa uma DFS recursiva simples, sem proteção contra ciclos.
 
-Retorna uma tupla com:
-o caminho encontrado (ou None se não achar),
-a ordem de exploração dos nós.
+  Retorna uma tupla com:
+  o caminho encontrado (ou None se não achar),
+  a ordem de exploração dos nós.
 
-dls_trace(node, goal, graph, limit, ...)
-Implementa a busca em profundidade limitada (DLS).
-Guarda a ordem de nós visitados e devolve o caminho caso o objetivo seja encontrado dentro do limite.
+- dls_trace(node, goal, graph, limit, ...)
+  Implementa a busca em profundidade limitada (DLS).
+  Guarda a ordem de nós visitados e devolve o caminho caso o objetivo seja encontrado dentro do limite.
 
-ids(start, goal, graph, max_depth=20)
-Implementa a Busca em Profundidade Iterativa (IDS).
-Roda o dls_trace com limites crescentes até encontrar a solução.
+- ids(start, goal, graph, max_depth=20)
+  Implementa a Busca em Profundidade Iterativa (IDS).
+  Roda o dls_trace com limites crescentes até encontrar a solução.
 
-Retorna:
-o caminho encontrado,
-o limite em que a solução foi descoberta,
-a ordem completa dos nós visitados em todas as iterações.
+  Retorna:
+  o caminho encontrado,
+  o limite em que a solução foi descoberta,
+  a ordem completa dos nós visitados em todas as iterações.
 
 ---
 
