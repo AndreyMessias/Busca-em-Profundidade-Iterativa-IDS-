@@ -93,18 +93,13 @@ a ordem completa dos nós visitados em todas as iterações.
     
 ## 📊 Comparação de Desempenho
 
-O ponto que você levantou é crucial e faz a comparação entre DFS e IDS ainda mais forte. A sua observação está totalmente correta, e incluir isso no README.md deixará a explicação mais robusta e profissional.
-
-Aqui está uma versão aprimorada da seção de Comparação de Desempenho para o seu README.md, incorporando o seu ponto.
-
-Comparação de Desempenho
 A saída do terminal mostra a principal diferença entre os algoritmos:
 
 - A DFS explorou 20 nós para encontrar a solução. Ela seguiu o ramo profundo (A -> X1 -> ... -> X15) até o fim antes de voltar e encontrar o caminho para E.
 
 - A IDS explorou apenas 10 nós (contando as repetições). Ela encontrou a solução no limite de profundidade 2 (A -> B -> E) e parou, sem precisar explorar a cadeia profunda X1...X15.
 
-** Essa diferença de desempenho demonstra a grande vantagem da IDS. No cenário de um grafo com um ramo muito longo, a DFS pode demorar significativamente para  encontrar a solução (ou até mesmo falhar), especialmente em cenários com caminhos infinitos, onde ela poderia entrar em um loop ou simplesmente nunca encontrar o objetivo. A IDS, por sua vez, sempre garante que a solução ótima (mais rasa) será encontrada, sem se perder em caminhos improdutivos.
+Essa diferença de desempenho demonstra a grande vantagem da IDS. No cenário de um grafo com um ramo muito longo, a DFS pode demorar significativamente para  encontrar a solução (ou até mesmo falhar), especialmente em cenários com caminhos infinitos, onde ela poderia entrar em um loop ou simplesmente nunca encontrar o objetivo. A IDS, por sua vez, sempre garante que a solução ótima (mais rasa) será encontrada, sem se perder em caminhos improdutivos.
 
 
 
