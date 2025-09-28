@@ -1,4 +1,3 @@
-# Busca-em-Profundidade-Iterativa-IDS-
 # Busca em Profundidade Iterativa (IDS)
 
 Este repositório contém uma implementação simples da **Busca em Profundidade Iterativa (IDS)** e uma comparação com a **Busca em Profundidade (DFS)** em um cenário problemático.
