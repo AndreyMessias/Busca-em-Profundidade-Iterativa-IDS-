@@ -21,8 +21,17 @@ Criamos uma árvore simples onde:
 - A DFS se perde em um caminho profundo sem encontrar a solução.  
 - A IDS, ao aumentar gradualmente a profundidade, encontra a **solução ótima** (mais rasa).  
 
-*(Insira aqui uma figura ou diagrama da árvore se quiser — pode ser feito no draw.io ou até no Canva)*
-
+        A (início)
+       / \
+      X1  B
+      |   |\
+      X2  C E (objetivo!)
+      |   |
+      X3  D
+      |
+     ...
+      |
+     X15
 ---
 
 ## 💻 Código
