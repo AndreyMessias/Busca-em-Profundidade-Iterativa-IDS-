@@ -66,6 +66,10 @@ Principais funções:
 ## 📊 Resultados
 
 ### Saída do Terminal
+      PONTO INICIAL DA ÁRVORE: A
+      OBJETIVO (NÓ ALVO): E
+      
+      
       Grafo de exemplo (resumo):
       A -> ['X1', 'B']
       B -> ['C', 'E']
@@ -73,7 +77,7 @@ Principais funções:
 
       --- Executando DFS (recursiva) ---
       DFS encontrou caminho: ['A', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15', 'B', 'C', 'D', 'E']
-      DFS ordem explorada (primeiros 50 nós): ['A', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15', 'B', 'C', 'D',       'E']
+      DFS ordem explorada (primeiros 50 nós): ['A', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15', 'B', 'C',            'D', 'E']
       Total de nós explorados pela DFS: 20
 
       --- Executando IDS ---
