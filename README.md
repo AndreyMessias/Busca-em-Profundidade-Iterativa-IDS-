@@ -84,13 +84,13 @@ Principais funções:
       IDS encontrou o objetivo 'E' no limite L=2
       Caminho IDS: ['A', 'B', 'E']
       IDS ordem (concatenação das iterações): ['A', 'A', 'B', 'A', 'B', 'C', 'A', 'B', 'C', 'D', 'E']
-      Total de nós (com repetições) nas iterações IDS: 11
+      Total de nós (com repetições) nas iterações IDS: 10
       
       --- Comparação simples ---
       DFS explorou (nós): 20
-      IDS explorou (nós com repetições): 11
+      IDS explorou (nós com repetições): 10
       
-      Observação: A DFS explorou primeiro o ramo profundo, visitando muitos nós X1..Xn antes de voltar e encontrar B->E. A IDS localizou E em profundidade pequena       (2), sem explorar toda a cadeia profunda.
+      Observação: A DFS explorou primeiro o ramo profundo, visitando muitos nós X1..Xn antes de voltar e encontrar B->E. A IDS localizou E em profundidade  pequena       (2), sem explorar toda a cadeia profunda.
       
       
   ---
