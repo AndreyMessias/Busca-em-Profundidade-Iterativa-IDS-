@@ -69,28 +69,28 @@ Principais funções:
       PONTO INICIAL DA ÁRVORE: A
       OBJETIVO (NÓ ALVO): E
       
-      
       Grafo de exemplo (resumo):
       A -> ['X1', 'B']
       B -> ['C', 'E']
       Ramo profundo: X1 -> ... -> X15 (len = 15)
-
+      
       --- Executando DFS (recursiva) ---
-      DFS encontrou caminho: ['A', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15', 'B', 'C', 'D', 'E']
-      DFS ordem explorada (primeiros 50 nós): ['A', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15', 'B', 'C',            'D', 'E']
+      DFS encontrou caminho: ['A', 'B', 'E']
+      Ordem explorada pela DFS (primeiros 50 nós): ['A', 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15', 'B', 'C', 'D', 'E']  
       Total de nós explorados pela DFS: 20
-
+      
       --- Executando IDS ---
       IDS encontrou o objetivo 'E' no limite L=2
-      Caminho IDS: ['A', 'B', 'E']
-      IDS ordem (concatenação das iterações): ['A', 'A', 'B', 'A', 'B', 'C', 'A', 'B', 'C', 'D', 'E']
-      Total de nós (com repetições) nas iterações IDS: 10
+      Caminho IDS: ['A', 'A', 'B', 'B', 'E']
+      Ordem IDS (concatenação das iterações): ['A', 'A', 'X1', 'B', 'A', 'X1', 'X2', 'B', 'C', 'E']
+      Total de nós (contando repetições) nas iterações IDS: 10
       
       --- Comparação simples ---
       DFS explorou (nós): 20
       IDS explorou (nós com repetições): 10
       
-      Observação: A DFS explorou primeiro o ramo profundo, visitando muitos nós X1..Xn antes de voltar e encontrar B->E. A IDS localizou E em profundidade  pequena       (2), sem explorar toda a cadeia profunda.
+      Observação: A DFS explorou primeiro o ramo profundo, visitando muitos nós X1..Xn antes de voltar e encontrar B->E.
+      A IDS localizou E em L pequeno (2) sem explorar a cadeia profunda acima desse nível.
       
       
   ---
