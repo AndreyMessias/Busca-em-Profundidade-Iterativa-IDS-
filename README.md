@@ -63,10 +63,10 @@ A implementação está no arquivo:
 Principais funções:
 
 - depth_first_search(graph, start_node, goal_node):
-  `Implementa a DFS usando uma abordagem recursiva eficiente com backtracking (append/pop). Inclui proteção contra ciclos para garantir o término da busca.`
+   `Implementa a DFS usando uma abordagem recursiva eficiente com backtracking (append/pop). Inclui proteção contra ciclos para garantir o término da busca.`
 
-- iterative_deepening_search(graph, start_node, goal_node, max_depth=20)
-  `Implementa a IDS. Orquestra múltiplas chamadas a uma busca em profundidade limitada (_dls_recursive interna) com limites de profundidade crescentes, de 0 até max_depth.`
+- iterative_deepening_search(graph, start_node, goal_node, max_depth=20):
+   `Implementa a IDS. Orquestra múltiplas chamadas a uma busca em profundidade limitada (_dls_recursive interna) com limites de profundidade crescentes, de 0 até max_depth.`
 
 ---
 
