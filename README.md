@@ -4,7 +4,7 @@
 
 ---
 
-##  sobre o Projeto
+## 📖 Sobre o Projeto
 
 Este repositório contém uma implementação desenvolvida como parte das atividades do **Núcleo de Estudos em Inteligência Artificial e Dados (NIAD)**, da **Universidade Federal de Lavras (UFLA)**. 
 O objetivo é oferecer uma implementação simples e clara dos algoritmos **Busca em Profundidade (DFS)** e **Busca em Profundidade Iterativa (IDS)**. O objetivo é demonstrar, através de um exemplo prático, as vantagens e desvantagens de cada abordagem.
@@ -13,7 +13,9 @@ O objetivo é oferecer uma implementação simples e clara dos algoritmos **Busc
 
 -   **IDS (Iterative Deepening Search):** Combina a eficiência de memória da DFS com a garantia de encontrar a solução mais rasa da BFS (Busca em Largura). Para isso, executa sucessivas buscas em profundidade com um limite que aumenta a cada iteração.
 
-### O Cenário de Demonstração
+---
+
+### 🧩 O Cenário de Demonstração
 
 O grafo utilizado no exemplo foi projetado para expor a principal fraqueza da DFS:
 
@@ -51,6 +53,8 @@ python3 ids.py
 
 O script irá imprimir a análise completa, incluindo o caminho encontrado, a trilha de exploração e a contagem de nós visitados para cada algoritmo.
 
+---
+
 ## 💻 Estrutura do Código
 
 A implementação está no arquivo:  
@@ -59,10 +63,10 @@ A implementação está no arquivo:
 Principais funções:
 
 - depth_first_search(graph, start_node, goal_node)
-  Implementa a DFS usando uma abordagem recursiva eficiente com backtracking (append/pop). Inclui proteção contra ciclos para garantir o término da busca.
+-           Implementa a DFS usando uma abordagem recursiva eficiente com backtracking (append/pop). Inclui proteção contra ciclos para garantir o término da busca.
 
 - iterative_deepening_search(graph, start_node, goal_node, max_depth=20)
-  Implementa a IDS. Orquestra múltiplas chamadas a uma busca em profundidade limitada (_dls_recursive interna) com limites de profundidade crescentes, de 0 até max_depth.
+-           Implementa a IDS. Orquestra múltiplas chamadas a uma busca em profundidade limitada (_dls_recursive interna) com limites de profundidade crescentes, de 0 até max_depth.
 
 ---
 
@@ -93,7 +97,6 @@ A execução do script produz a seguinte saída, que detalha o comportamento de 
     --- Comparação ---
     Nós explorados (DFS): 20
     Nós explorados (IDS com repetições): 10
-          
       
   ---
     
