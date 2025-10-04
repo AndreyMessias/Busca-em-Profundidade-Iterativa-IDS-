@@ -1,154 +1,198 @@
-# ids.py
-# Implementação simples de DLS e IDS + uma DFS para comparação
-# Rode: python ids.py
+"""Implementação e comparação de algoritmos de busca: DFS, DLS e IDS.
 
-from typing import List, Dict, Optional, Tuple
+Este módulo fornece implementações eficientes dos algoritmos Depth-First Search (DFS),
+Depth-Limited Search (DLS), e Iterative Deepening Search (IDS). Ele também
+inclui um exemplo prático que demonstra a vantagem do IDS sobre o DFS em
+um grafo com ramos de profundidade desigual.
+"""
 
-def dfs_recursive(start: str, goal: str, graph: Dict[str, List[str]]) -> Tuple[Optional[List[str]], List[str]]:
+from typing import List, Dict, Optional, Tuple, Set, TypeAlias
+
+# Type Alias para representar a estrutura do grafo, melhorando a legibilidade.
+Graph: TypeAlias = Dict[str, List[str]]
+
+def depth_first_search(
+    graph: Graph,
+    start_node: str,
+    goal_node: str
+) -> Tuple[Optional[List[str]], List[str]]:
+    """Executa uma Busca em Profundidade (DFS) em um grafo.
+
+    Esta implementação utiliza recursão com backtracking explícito (append/pop)
+    e um conjunto de nós visitados para evitar ciclos e garantir o término
+    da busca em grafos cíclicos.
+
+    Args:
+        graph: Um dicionário representando a lista de adjacência do grafo.
+        start_node: O nó inicial da busca.
+        goal_node: O nó objetivo a ser encontrado.
+
+    Returns:
+        Uma tupla contendo:
+        - Uma lista de strings representando o caminho do início ao fim, ou None
+          se nenhum caminho for encontrado.
+        - Uma lista de strings com a ordem completa dos nós visitados.
     """
-    DFS recursiva simples (sem proteção contra ciclos).
-    Retorna (caminho_encontrado ou None, ordem_explorada).
-    Observação: nesta implementação assumimos um grafo sem ciclos problemáticos ou que
-    a ordem dos filhos fará a DFS explorar primeiro o ramo profundo.
-    """
-    visited = set()
-    order = []
     path = []
+    exploration_order = []
+    visited: Set[str] = set()
 
-    def dfs(node: str) -> Optional[List[str]]:
-        order.append(node)
-        visited.add(node)
-        path.append(node)
-        if node == goal:
-            return path.copy()
-        for child in graph.get(node, []):
-            if child not in visited:
-                res = dfs(child)
-                if res is not None:
-                    return res
+    def _dfs_recursive(current_node: str) -> bool:
+        """Função auxiliar recursiva que modifica 'path' e 'visited'."""
+        path.append(current_node)
+        visited.add(current_node)
+        exploration_order.append(current_node)
+
+        if current_node == goal_node:
+            return True
+
+        for neighbor in graph.get(current_node, []):
+            if neighbor not in visited:
+                if _dfs_recursive(neighbor):
+                    return True
+        
+        # BACKTRACK: remove o nó do caminho ao retroceder de um ramo sem saída.
         path.pop()
-        return None
+        return False
 
-    result = dfs(start)
-    return result, order
+    found = _dfs_recursive(start_node)
+    return path if found else None, exploration_order
 
-def dls_trace(node: str, goal: str, graph: Dict[str, List[str]], limit: int,
-              visited_in_path: Optional[set]=None, order: Optional[List[str]]=None, path: Optional[List[str]]=None) -> Optional[List[str]]:
+
+def _dls_recursive(
+    graph: Graph,
+    goal_node: str,
+    path: List[str],
+    limit: int,
+    exploration_order: List[str]
+) -> bool:
+    """Função auxiliar recursiva para a Busca em Profundidade Limitada (DLS).
+
+    Opera modificando a lista 'path' compartilhada. A busca é cortada se a
+    profundidade atual exceder o limite estabelecido.
+
+    Args:
+        graph: O grafo da busca.
+        goal_node: O nó objetivo.
+        path: A lista representando o caminho atual (modificada in-place).
+        limit: A profundidade máxima permitida para a busca.
+        exploration_order: Lista para registrar a ordem de visitação dos nós.
+
+    Returns:
+        True se o objetivo for encontrado dentro do limite, False caso contrário.
     """
-    Busca em Profundidade Limitada (DLS) que registra a ordem de nós visitados.
-    visited_in_path: conjunto usado para evitar ciclos no caminho atual (entra/sai estilo).
-    order: lista onde são adicionados os nós na ordem de visita.
-    path: lista representando o caminho atual.
+    current_node = path[-1]
+    exploration_order.append(current_node)
+
+    if current_node == goal_node:
+        return True
+
+    # A profundidade corresponde ao número de arestas, que é len(path) - 1.
+    if len(path) - 1 >= limit:
+        return False
+
+    for neighbor in graph.get(current_node, []):
+        # Evita ciclos no caminho atual, garantindo o progresso da busca.
+        if neighbor not in path:
+            path.append(neighbor)
+            if _dls_recursive(graph, goal_node, path, limit, exploration_order):
+                return True
+            # BACKTRACK: desfaz o passo para explorar outras possibilidades.
+            path.pop()
+
+    return False
+
+def iterative_deepening_search(
+    graph: Graph,
+    start_node: str,
+    goal_node: str,
+    max_depth: int = 20
+) -> Tuple[Optional[List[str]], int, List[str]]:
+    """Executa uma Busca em Profundidade Iterativa (IDS) em um grafo.
+
+    Este método combina a eficiência de espaço da DFS com a otimalidade da BFS
+    (em grafos com custos de aresta uniformes) ao realizar sucessivas buscas
+    em profundidade limitada com limites crescentes.
+
+    Args:
+        graph: O grafo da busca.
+        start_node: O nó inicial.
+        goal_node: O nó objetivo.
+        max_depth: A profundidade máxima que o algoritmo irá explorar.
+
+    Returns:
+        Uma tupla contendo:
+        - O caminho encontrado, ou None se não for encontrado até a 'max_depth'.
+        - A profundidade em que a solução foi encontrada (-1 se não encontrada).
+        - A ordem total de exploração, concatenada de todas as iterações.
     """
-    if visited_in_path is None:
-        visited_in_path = set()
-    if order is None:
-        order = []
-    if path is None:
-        path = []
+    total_exploration_order = []
+    # Itera sobre os limites de profundidade, de 0 até max_depth.
+    for depth_limit in range(max_depth + 1):
+        path = [start_node]
+        order_this_iteration = []
+        
+        found = _dls_recursive(graph, goal_node, path, depth_limit, order_this_iteration)
+        
+        total_exploration_order.extend(order_this_iteration)
 
-    order.append(node)
-    if node == goal:
-        return path + [node]
-    if limit == 0:
-        return None
+        if found:
+            return path, depth_limit, total_exploration_order
+    
+    return None, -1, total_exploration_order
 
-    visited_in_path.add(node)
-    for child in graph.get(node, []):
-        if child in visited_in_path:
-            continue
-        path.append(node) if (not path or path[-1] != node) else None
-        res = dls_trace(child, goal, graph, limit - 1, visited_in_path, order, path + [node])
-        if res is not None:
-            return res
-    # remove o nó da marcação do caminho atual
-    visited_in_path.remove(node)
-    return None
-
-def ids(start: str, goal: str, graph: Dict[str, List[str]], max_depth: int = 20) -> Tuple[Optional[List[str]], int, List[str]]:
-    """
-    Busca em Profundidade Iterativa (IDS).
-    Retorna: (caminho, limite_em_que_encontrou, ordem_total_explorada_concat)
-    ordem_total_explorada_concat é uma concatenação das ordens geradas por cada DLS (útil para visualização).
-    """
-    total_order = []
-    for L in range(0, max_depth + 1):
-        # cada DLS deve coletar sua própria ordem
-        order_this_round: List[str] = []
-        # Usamos um wrapper para capturar a ordem do dls_trace
-        def dls_wrapper(node, goal, graph, limit):
-            # usamos listas/conjuntos para capturar a ordem do dls_trace interno
-            visited_set = set()
-            order_local: List[str] = []
-            res = dls_trace(node, goal, graph, limit, visited_set, order_local, [])
-            return res, order_local
-
-        res, order_this_round = dls_wrapper(start, goal, graph, L)
-        # adiciona a ordem (mantemos como sequência, não removemos repetições)
-        total_order.extend(order_this_round)
-        if res is not None:
-            # encontrou solução na profundidade L
-            # reconstruir o caminho de forma limpa com um “parent” estilo BFS em uma DFS limitada seria complexo aqui;
-            # mas o dls_trace retorna o caminho quando encontra (no wrapper o res já é a lista do caminho)
-            return res, L, total_order
-    return None, -1, total_order
 
 if __name__ == "__main__":
-    # Grafo de Exemplo:
-    # A tem um ramo profundo (X1 -> X2 -> ... -> X15) e também um ramo raso via B -> E (objetivo)
-    # A ordem dos filhos em A faz a DFS explorar primeiro o ramo profundo -> "gasta tempo"
-    graph_example: Dict[str, List[str]] = {}
-
-    # cria a cadeia profunda X1..X15
+    # --- Bloco de Execução Principal ---
+    
+    # 1. Configuração do Grafo de Exemplo
+    # Este grafo é desenhado para destacar a fraqueza da DFS: um ramo muito
+    # profundo (A -> X1 -> ...) é explorado antes de um ramo raso (A -> B -> E).
+    graph_example: Graph = {}
+    
     depth_chain_len = 15
     chain_nodes = [f"X{i}" for i in range(1, depth_chain_len + 1)]
     for i in range(len(chain_nodes)):
         if i < len(chain_nodes) - 1:
             graph_example[chain_nodes[i]] = [chain_nodes[i+1]]
-        else:
-            graph_example[chain_nodes[i]] = []  # fim da cadeia
 
-    # construindo a árvore principal
     graph_example["A"] = [chain_nodes[0], "B"]
-    graph_example["B"] = ["C", "E"]  
+    graph_example["B"] = ["C", "E"]
     graph_example["C"] = ["D"]
-    graph_example["D"] = []
-    graph_example["E"] = []
+    
+    all_nodes = ["A", "B", "C", "D", "E"] + chain_nodes
+    for node in all_nodes:
+        graph_example.setdefault(node, [])
 
-    # garantir que todos os nós existam no dicionário
-    for n in ["A", "B", "C", "D", "E"] + chain_nodes:
-        graph_example.setdefault(n, [])
-
+    # 2. Definição dos Nós de Início e Fim
     start = "A"
     goal = "E"
-
-    print("PONTO INICIAL DA ÁRVORE:", start)
-    print("OBJETIVO (NÓ ALVO):", goal)
-    print("\nGrafo de exemplo (resumo):")
-    print("A ->", graph_example["A"])
-    print("B ->", graph_example["B"])
-    print(f"Ramo profundo: {chain_nodes[0]} -> ... -> {chain_nodes[-1]} (len = {depth_chain_len})")
-    print("\n--- Executando DFS (recursiva) ---")
-    path_dfs, order_dfs = dfs_recursive(start, goal, graph_example)
+    print(f"PONTO INICIAL: {start}, OBJETIVO: {goal}\n")
+    
+    # 3. Execução e Análise da DFS
+    print("----- Executando DFS -----")
+    path_dfs, order_dfs = depth_first_search(graph_example, start, goal)
     if path_dfs:
-        print("DFS encontrou caminho:", path_dfs)
+        print(f"Caminho final da DFS: {' -> '.join(path_dfs)}")
     else:
-        print("DFS não encontrou o objetivo (ou demorou demais).")
-    print("Ordem explorada pela DFS (primeiros 50 nós):", order_dfs[:50])
-    print(f"Total de nós explorados pela DFS: {len(order_dfs)}")
+        print("DFS não encontrou o objetivo.")
+    print("\nTrilha completa de exploração da DFS (nós visitados na sequência):")
+    print(' -> '.join(order_dfs))
+    print(f"\nTotal de nós explorados pela DFS: {len(order_dfs)}\n")
 
-    print("\n--- Executando IDS ---")
-    path_ids, depth_found, order_ids = ids(start, goal, graph_example, max_depth=10)
+    # 4. Execução e Análise da IDS
+    print("----- Executando IDS -----")
+    path_ids, depth_found, order_ids = iterative_deepening_search(graph_example, start, goal, max_depth=10)
     if path_ids:
-        print(f"IDS encontrou o objetivo '{goal}' no limite L={depth_found}")
-        print("Caminho IDS:", path_ids)
+        print(f"IDS encontrou o objetivo '{goal}' na profundidade L={depth_found}")
+        print(f"Caminho final do IDS: {' -> '.join(path_ids)}")
     else:
         print("IDS não encontrou o objetivo até o limite máximo.")
-    print("Ordem IDS (concatenação das iterações):", order_ids[:200])
-    print(f"Total de nós (contando repetições) nas iterações IDS: {len(order_ids)}")
+    print("\nTrilha completa de exploração do IDS (concatenação das iterações L=0, L=1...):")
+    print(' -> '.join(order_ids))
+    print(f"\nTotal de nós (com repetições) nas iterações IDS: {len(order_ids)}\n")
 
-    print("\n--- Comparação simples ---")
-    print("DFS explorou (nós):", len(order_dfs))
-    print("IDS explorou (nós com repetições):", len(order_ids))
-    print("\nObservação: A DFS explorou primeiro o ramo profundo, visitando muitos nós X1..Xn antes de voltar e encontrar B->E.")
-    print("A IDS localizou E em L pequeno (2) sem explorar a cadeia profunda acima desse nível.")
+    # 5. Comparação Final
+    print("--- Comparação ---")
+    print(f"Nós explorados (DFS): {len(order_dfs)}")
+    print(f"Nós explorados (IDS com repetições): {len(order_ids)}")
